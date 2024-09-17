@@ -1,0 +1,15 @@
+---
+- name: Update and upgrade all servers in the inventory
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update the list of available packages and their versions
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages to the latest version
+      ansible.builtin.apt:
+        upgrade: dist
+        autoremove: yes # Optional: remove unused packages
+        autoclean: yes # Optional: remove retrieved package files from the cache
