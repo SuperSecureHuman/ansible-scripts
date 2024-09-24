@@ -1,0 +1,35 @@
+---
+- name: Purge snap and snapd
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure all snap packages are removed
+      shell: |
+        snap list --all | awk '{print $1}' | grep -v Name | xargs -I{} snap remove {}
+      ignore_errors: yes
+
+    - name: Uninstall snapd and snap
+      apt:
+        name: 
+          - snapd
+          - snap
+        state: absent
+        purge: yes
+
+    - name: Remove snapd cache and directories
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /var/cache/snapd/
+        - /var/lib/snapd/
+        - /snap
+        
+    - name: Disable snapd service
+      systemd:
+        name: snapd
+        enabled: no
+        state: stopped
+      ignore_errors: yes
+
