@@ -1,0 +1,20 @@
+- name: Create a user 
+  hosts: all
+  become: yes
+  tasks:
+  - name: make k3s users
+    user:
+      name: k3suser
+      shell: /bin/bash
+      home: /home/k3suser
+
+  - name: Add user to sudo group
+    user:
+      name: k3suser
+      groups: sudo
+      append: yes
+
+  - name: Set password for k3suser
+    ansible.builtin.user:
+      name: k3suser
+      password: "{{ 'k3spassword' | password_hash('sha512') }}"
