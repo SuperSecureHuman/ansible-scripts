@@ -1,0 +1,26 @@
+---
+- name: Install gluster and its components
+  hosts: all
+  become: yes
+  tasks:
+
+  - name: Update apt-get repo and cache
+    apt:
+      update_cache: yes
+      cache_valid_time: 600
+
+  - name: Install gluster packages
+    apt:
+      pkg:
+        - glusterfs-server
+        - glusterfs-client
+      state: present
+
+  - name: Start and enable gluster services
+    systemd:
+      name: "{{ item }}"
+      enabled: yes
+      state: started
+    loop:
+      - glusterd
+

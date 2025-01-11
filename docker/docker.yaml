@@ -1,5 +1,5 @@
 ---
-- name: Add Docker’s official GPG key and repository
+- name: Add Docker's official GPG key and repository
   hosts: all
   become: yes
   tasks:

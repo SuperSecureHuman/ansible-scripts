@@ -1,0 +1,15 @@
+---
+- name: Set CUDA environment variables globally
+  hosts: all
+  become: yes
+  tasks:
+    - name: Append environment variable settings to /etc/profile
+      blockinfile:
+        path: /etc/profile
+        block: |
+          # Set CUDA PATH and LD_LIBRARY_PATH
+          export PATH=/usr/local/cuda/bin:$PATH
+          export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        create: no
+        backup: yes
